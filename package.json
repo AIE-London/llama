@@ -1,0 +1,16 @@
+{
+  "name": "@dancotton/llama",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Notion deeplink generator bot for slack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Dan Cotton",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/bolt": "^2.4.1"
+  }
+}

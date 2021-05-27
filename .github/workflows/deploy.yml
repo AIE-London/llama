@@ -1,0 +1,24 @@
+name: GCP Cloud Function Deploy
+
+on:
+  push:
+    branches: [ live ]
+  pull_request:
+    branches: [ live ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - id: deploy
+      uses: google-github-actions/deploy-cloud-functions@main
+      with:
+        name: ${{ secrets.GCP_FUNCTION_NAME }}
+        runtime: nodejs10
+        credentials: ${{ secrets.gcp_credentials }}
+        region: ${{ secrets.GCP_REGION }}
+        env_vars: SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }},SLACK_SIGNING_SECRET=${{ secrets.SLACK_SIGNING_SECRET }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
