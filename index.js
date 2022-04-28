@@ -18,6 +18,17 @@ app.error(console.error);
 app.event('link_shared', async ({ event, client, ack }) => {
   try {
     console.log(event);
+    handleGCPLink();
+    handleNotionLink();
+    ack && ack();
+  }
+  catch (error) {
+    console.error(error);
+  }
+});
+
+const handleNotionLink = ({ event, client, ack }) => {
+  if (event.links[0].url.includes('notion.so/')) {
     const linkPath = event.links[0].url.split('notion.so/').pop();
     const newLink = linkPath && `<notion://${linkPath}/>`;
     if (newLink) {
@@ -39,12 +50,32 @@ app.event('link_shared', async ({ event, client, ack }) => {
         console.error(e);
       }
     }
-    ack && ack();
   }
-  catch (error) {
-    console.error(error);
+};
+
+const handleGCPLink = ({ event, client, ack }) => {
+  if (event.links[0].url.includes('https://console.cloud.google.com/')) {
+    const link = event.links[0].url
+    const newLink = `https://accounts.google.com/AccountChooser/signinchooser?continue=${encodeURIComponent(link)}&flowName=GlifWebSignIn&flowEntry=AccountChooser`;
+    try {
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts || event.message_ts,
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": newLink
+            }
+          }
+        ]
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
-});
+}
 
 /**
  * HTTP Cloud Function (llama)
