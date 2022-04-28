@@ -27,7 +27,7 @@ app.event('link_shared', async ({ event, client, ack }) => {
   }
 });
 
-const handleNotionLink = ({ event, client, ack }) => {
+const handleNotionLink = async ({ event, client, ack }) => {
   if (event.links[0].url.includes('notion.so/')) {
     const linkPath = event.links[0].url.split('notion.so/').pop();
     const newLink = linkPath && `<notion://${linkPath}/>`;
@@ -53,7 +53,7 @@ const handleNotionLink = ({ event, client, ack }) => {
   }
 };
 
-const handleGCPLink = ({ event, client, ack }) => {
+const handleGCPLink = async ({ event, client, ack }) => {
   if (event.links[0].url.includes('https://console.cloud.google.com/')) {
     const link = event.links[0].url
     const newLink = `https://accounts.google.com/AccountChooser/signinchooser?continue=${encodeURIComponent(link)}&flowName=GlifWebSignIn&flowEntry=AccountChooser`;
