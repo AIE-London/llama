@@ -1,6 +1,10 @@
 # Llama
 
-Llama is a Slack bot that takes any links to https://notion.so - and posts an alternative deep-link into the desktop or mobile notion app. Super Simple!
+Llama is a Slack bot that: 
+ - takes any links to https://notion.so and posts an alternative deep-link into the desktop or mobile notion app. 
+ - takes any links to https://console.cloud.google.com and posts an alternative account-switcher link
+ 
+Super Simple!
 
 We built this bot on [glitch.com](https://glitch.com) using Slack's Bolt framework for Node.JS and have since deployed it to a Google Cloud Function.
 
