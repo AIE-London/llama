@@ -18,8 +18,8 @@ app.error(console.error);
 app.event('link_shared', async ({ event, client, ack }) => {
   try {
     console.log(event);
-    handleGCPLink();
-    handleNotionLink();
+    await handleGCPLink();
+    await handleNotionLink();
     ack && ack();
   }
   catch (error) {
