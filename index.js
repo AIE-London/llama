@@ -20,6 +20,7 @@ app.event('link_shared', async ({ event, client, ack }) => {
     console.log(event);
     await handleGCPLink({ event, client, ack });
     await handleNotionLink({ event, client, ack });
+    await handleFigmaLink({ event, client, ack });
     ack && ack();
   }
   catch (error) {
@@ -57,6 +58,30 @@ const handleGCPLink = async ({ event, client, ack }) => {
   if (event.links[0].url.includes('https://console.cloud.google.com/')) {
     const link = event.links[0].url
     const newLink = `https://accounts.google.com/AccountChooser/signinchooser?continue=${encodeURIComponent(link)}&flowName=GlifWebSignIn&flowEntry=AccountChooser`;
+    try {
+      await client.chat.postMessage({
+        channel: event.channel,
+        thread_ts: event.thread_ts || event.message_ts,
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": newLink
+            }
+          }
+        ]
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+}
+
+const handleFigmaLink = async ({ event, client, ack }) => {
+  if (event.links[0].url.includes('https://www.figma.com/')) {
+    const linkPath = event.links[0].url.split('figma.com/').pop();
+    const newLink = linkPath && `<figma://${linkPath}/>`;
     try {
       await client.chat.postMessage({
         channel: event.channel,
